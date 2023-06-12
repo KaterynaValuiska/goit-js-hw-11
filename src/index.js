@@ -18,12 +18,7 @@ function onSubmit(evt) {
   evt.preventDefault();
   
   fetchRequest(inputValue)
-    .then((data) => {
-      gallery.insertAdjacentHTML('beforeend', renderCards(data.hits))
-      console.log(cards); 
-     
-      
-   })
+    .then((data) => gallery.insertAdjacentHTML('beforeend', renderCards(data.hits)))
     .catch((error) => console.log(error));
 }
 
