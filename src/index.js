@@ -50,7 +50,7 @@ async function fetchRequest(inputValue) {
 }
 
 function renderCards(cards) {
-  const markup = cards
+  return cards
     .map(({tags, webformatURL}) => {
       return `
       <div class="photo-card">
