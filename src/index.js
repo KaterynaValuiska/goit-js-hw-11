@@ -15,11 +15,13 @@ function onInput(evt) {
 }
 
 function onSubmit(evt) {
-    evt.preventDefault();
+  evt.preventDefault();
+  
   fetchRequest(inputValue)
-    .then((cards) => {
-      console.log(cards);
-      renderCards(cards); 
+    .then((data) => {
+      gallery.insertAdjacentHTML('beforeend', renderCards(data.hits))
+      console.log(cards); 
+     
       
    })
     .catch((error) => console.log(error));
@@ -41,6 +43,7 @@ async function fetchRequest(inputValue) {
         }
       });
    console.log(response);
+   
   } catch (error) {
     console.error(error);
   }
