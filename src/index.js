@@ -73,7 +73,5 @@ function renderCards(cards) {
       `;
     })
     .join("");
-  
-  gallery.innerHTML = markup;
 }
 
