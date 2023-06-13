@@ -1,5 +1,8 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const searchForm = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
@@ -10,9 +13,11 @@ const API_KEY = '37154434-e108fb93a0dd643270de780f1';
 searchForm.addEventListener('submit', onSubmit);
 loadMore.addEventListener('click', onLoadMore)
 
-
+const perPage = 40;
 let inputValue = '';
 let currentPage = 1;
+
+
 
 async function onSubmit(evt) {
 
@@ -21,40 +26,48 @@ async function onSubmit(evt) {
   gallery.innerHTML = '';
   inputValue = evt.currentTarget.elements.searchQuery.value;
   try {
-
-    const { hits, totalHits } = await fetchRequest(inputValue, page=1);
+    const { hits, totalHits } = await fetchRequest(inputValue, currentPage);
     if (hits.length === 0) {
       gallery.innerHTML = '';
       loadMore.hidden = true;
       errorShow();
       return;
     }
-    console.log(hits);
+    
     gallery.insertAdjacentHTML('beforeend', renderCards(hits));
-    if (totalHits !== page) {
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    if (totalHits !== perPage) {
       loadMore.hidden = false;
     }
   } catch (error) {
     console.error(error);
-    errorShow()
   } 
     
 }
 
 async function onLoadMore() {
   currentPage += 1;
+
   try {
-    const { hits } = await fetchRequest(inputValue, currentPage);
-    console.log(hits);
+    refresh();
+    const { hits, totalHits } = await fetchRequest(inputValue, currentPage);
+   
     gallery.insertAdjacentHTML('beforeend', renderCards(hits));
-    loadMore.classList.remove('hide');
+
+    const allPage = totalHits / perPage;
+    
+    if (currentPage >= allPage) {
+      loadMore.hidden = true;
+      Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+    }
+    
   } catch (error) {
     console.error(error);
-    errorShow()
+    
   } 
 }
 
-async function fetchRequest(inputValue, page=1) {
+async function fetchRequest(inputValue, currentPage) {
     try {
       const {data} = await axios.get('https://pixabay.com/api/', {
         params: {
@@ -63,8 +76,8 @@ async function fetchRequest(inputValue, page=1) {
           image_type: "photo",
           orientation: "horizontal",
           safesearch: true,
-          per_page: 40,
-          page: page,
+          per_page: perPage,
+          page: currentPage,
         }
       });
       return data;
@@ -77,10 +90,12 @@ async function fetchRequest(inputValue, page=1) {
 
 function renderCards(cards) {
   return cards
-    .map(({tags, webformatURL, likes, views, comments, downloads}) => {
+    .map(({largeImageURL, tags, webformatURL, likes, views, comments, downloads}) => {
       return `
       <div class="photo-card">
-  <img src="${webformatURL}" alt=${tags} loading="lazy" class="photo"/>
+ <a class="gallery__link" href=${largeImageURL}>
+  <img src="${webformatURL}" alt=${tags} loading="lazy" class="photo gallery__image"/>
+  </a>
   <div class="info">
     <p class="info-item">
       <b>Likes: ${likes} </b>
@@ -96,6 +111,7 @@ function renderCards(cards) {
     </p>
   </div>
 </div>
+
       `;
     })
     .join("");
@@ -105,3 +121,8 @@ function errorShow() {
   Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
+lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+  captionDelay: 250,
+   disableScroll: false,
+});
