@@ -35,20 +35,20 @@ function renderCards(cards) {
   </a>
   <div class="info">
     <p class="info-item">
-      <b>Likes:  </b>
-      <span>${likes} </span>
+      <b>Likes  </b>
+      <span class="info-values">${likes} </span>
     </p>
     <p class="info-item">
-      <b>Views: </b>
-      <span>${views}</span>
+      <b>Views </b>
+      <span class="info-values">${views}</span>
     </p>
     <p class="info-item">
-      <b>Comments: </b>
-      <span>${comments}</span>
+      <b>Comments </b>
+      <span class="info-values">${comments}</span>
     </p>
     <p class="info-item">
-      <b>Downloads: </b>
-      <span>${downloads}</span>
+      <b>Downloads </b>
+      <span class="info-values">${downloads}</span>
     </p>
   </div>
 </div>
