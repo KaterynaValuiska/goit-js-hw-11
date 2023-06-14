@@ -1,32 +1,36 @@
 
-.hide {
-    display: none;
-}
 
 .gallery {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    margin: auto;
     margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .photo-card {
     width: 250px;
-    /* border-radius: 25px; */
 }
 
 .info {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
     justify-content:space-between;
     padding: 10px;
-    height: 50px;
+    padding-top: 0;
+    height: 40px;
     align-content: center;
 
 }
 
 .info-item {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    text-align: center;
     padding: 0;
     margin: 0;
 }
@@ -59,7 +63,6 @@ padding-left: 18px;
 }
 
 .search-form input {
-    
     width: 263px;
     height: 45px;
     border: 1.5px solid rgba(17, 17, 17, 0.05);

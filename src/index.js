@@ -17,7 +17,11 @@ const perPage = 40;
 let inputValue = '';
 let currentPage = 1;
 
-
+let lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+  captionDelay: 250,
+   disableScroll: false,
+});
 
 async function onSubmit(evt) {
 
@@ -35,7 +39,16 @@ async function onSubmit(evt) {
     }
     
     gallery.insertAdjacentHTML('beforeend', renderCards(hits));
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    lightbox.refresh();
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`, {timeout: 2000,},);
+    const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
     if (totalHits !== perPage) {
       loadMore.hidden = false;
     }
@@ -47,12 +60,20 @@ async function onSubmit(evt) {
 
 async function onLoadMore() {
   currentPage += 1;
-
   try {
-    refresh();
+    
     const { hits, totalHits } = await fetchRequest(inputValue, currentPage);
    
     gallery.insertAdjacentHTML('beforeend', renderCards(hits));
+    lightbox.refresh();
+    const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
 
     const allPage = totalHits / perPage;
     
@@ -93,25 +114,28 @@ function renderCards(cards) {
     .map(({largeImageURL, tags, webformatURL, likes, views, comments, downloads}) => {
       return `
       <div class="photo-card">
- <a class="gallery__link" href=${largeImageURL}>
-  <img src="${webformatURL}" alt=${tags} loading="lazy" class="photo gallery__image"/>
+ <a href=${largeImageURL}>
+  <img src="${webformatURL}" alt= "${tags}" loading="lazy" class="photo"/>
   </a>
   <div class="info">
     <p class="info-item">
-      <b>Likes: ${likes} </b>
+      <b>Likes:  </b>
+      <span>${likes} </span>
     </p>
     <p class="info-item">
-      <b>Views: ${views}</b>
+      <b>Views: </b>
+      <span>${views}</span>
     </p>
     <p class="info-item">
-      <b>Comments: ${comments}</b>
+      <b>Comments: </b>
+      <span>${comments}</span>
     </p>
     <p class="info-item">
-      <b>Downloads: ${downloads}</b>
+      <b>Downloads: </b>
+      <span>${downloads}</span>
     </p>
   </div>
 </div>
-
       `;
     })
     .join("");
@@ -121,8 +145,3 @@ function errorShow() {
   Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
-lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-  captionDelay: 250,
-   disableScroll: false,
-});
