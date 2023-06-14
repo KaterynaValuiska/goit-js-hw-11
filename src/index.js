@@ -50,9 +50,10 @@ window.scrollBy({
   top: cardHeight * 2,
   behavior: "smooth",
 });
-    if (totalHits !== perPage) {
-      loadMore.hidden = false;
+    if (totalHits >= perPage) {
+       loadMore.hidden = false;
     }
+   
   } catch (error) {
     console.error(error);
   } 
