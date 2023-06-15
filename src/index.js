@@ -43,6 +43,7 @@ async function onSubmit(evt) {
   gallery.innerHTML = '';
   inputValue = evt.currentTarget.elements.searchQuery.value;
   currentPage = 1;
+  loadMore.hidden = true;
   try {
     const { hits, totalHits } = await fetchRequest(inputValue, currentPage);
     console.log(hits);
@@ -62,7 +63,9 @@ async function onSubmit(evt) {
       loadMore.hidden = true;
       return;
     }
-   loadMore.hidden = false;
+
+    loadMore.hidden = false;
+    
   } catch (error) {
     console.error(error);
   } 
