@@ -57,8 +57,6 @@ function renderCards(cards) {
     .join("");
 }
 
-function errorShow() {
-  Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-}
 
-export { errorShow, renderCards, fetchRequest, perPage };
+
+export { renderCards, fetchRequest, perPage };
